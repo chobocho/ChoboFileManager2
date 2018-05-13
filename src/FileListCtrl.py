@@ -38,7 +38,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.InsertItem(self.GetItemCount(), file[0])
             self.SetItem(index, 0, file[0])
             self.SetItem(index, 1, file[1])
-            if index % 2 == 1:
+            if index % 2 == 0:
                 self.SetItemBackgroundColour(index, "Light gray")
             if "exe." == file[0][:-5:-1] or \
                "tab." == file[0][:-5:-1]:

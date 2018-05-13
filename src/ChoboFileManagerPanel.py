@@ -13,9 +13,15 @@ class ChoboFileManagerPanel(wx.Panel):
         self.urlManger = UrlManager.UrlManager()
         self.drawUI()
 
-    def OnClickGo(self, evt):
-        print ("OnClickGo")
+    def OnSaveURL(self, evt):
+        print ("OnSaveURL")
         
+    def OnClearURL(self, evt):
+        self.urlManger.clearAll()
+
+    def OnDeleteURL(self, evt):
+        self.urlManger.deleteUrl()
+
     def onUrlGo(self, evt):
         strUrl = self.urlText.GetValue()
 
@@ -49,6 +55,8 @@ class ChoboFileManagerPanel(wx.Panel):
         print ("run cmd " + tmpCmd)
         if (tmpCmd.lower() == "update"):
             self.fileList.update(self.fileManager.getFileList())
+        elif (tmpCmd.lower() == "explore"):
+           os.system("explorer " + self.fileManager.getCurrentDir())
         else:
             os.system("start " + tmpCmd)
 
@@ -178,7 +186,7 @@ class ChoboFileManagerPanel(wx.Panel):
         urlMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
 
         self.urlSaveBtn = wx.Button(self, 10, "Save URL", size=(30,30))
-        self.urlSaveBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
+        self.urlSaveBtn.Bind(wx.EVT_BUTTON, self.OnSaveURL)
         urlMngBtnBox.Add(self.urlSaveBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         #self.urlExportBtn = wx.Button(self, 10, "Export", size=(30,30))
@@ -186,11 +194,11 @@ class ChoboFileManagerPanel(wx.Panel):
         #urlMngBtnBox.Add(self.urlExportBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         self.urlDeleteBtn = wx.Button(self, 10, "Delete", size=(30,30))
-        self.urlDeleteBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
+        self.urlDeleteBtn.Bind(wx.EVT_BUTTON, self.OnDeleteURL)
         urlMngBtnBox.Add(self.urlDeleteBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         self.urlClearBtn = wx.Button(self, 10, "Clear", size=(30,30))
-        self.urlClearBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
+        self.urlClearBtn.Bind(wx.EVT_BUTTON, self.OnClearURL)
         urlMngBtnBox.Add(self.urlClearBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         sizer.Add(urlMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
