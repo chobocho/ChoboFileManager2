@@ -9,7 +9,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
         self.Bind(wx.EVT_LEFT_DCLICK, self.onDoubleClick)
         self.addColumn()
-		
+
     def setPanel(self, panel):
         self.panel = panel
 
@@ -21,7 +21,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def getFileInfo(self, idx):
         file = []
         file.append(self.GetItem(idx, 0).GetText())
-        file.append(self.GetItem(idx, 0).GetText())
+        file.append(self.GetItem(idx, 1).GetText())
         return file
 
     def onItemSelected(self, evt):

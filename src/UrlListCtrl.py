@@ -12,3 +12,24 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.InsertColumn(0, "ID", width=30)
         self.InsertColumn(1, "URL", width=170)
         self.InsertColumn(2, "Memo", width=200)
+
+    def getUrlInfo(self, idx):
+        url = []
+        url.append(self.GetItem(idx, 0).GetText())
+        url.append(self.GetItem(idx, 1).GetText())
+        url.append(self.GetItem(idx, 2).GetText())
+        return url
+
+    def onItemSelected(self, evt):
+        self.currentItem = evt.Index
+           
+    def update(self, urlList):
+        self.DeleteAllItems()
+        for url in urlList:
+            index = self.InsertItem(self.GetItemCount(), url[0])
+            self.SetItem(index, 0, str(index+1))
+            self.SetItem(index, 1, url[0])
+            self.SetItem(index, 2, url[1])
+            if index % 2 == 1:
+                self.SetItemBackgroundColour(index, "Light gray")
+

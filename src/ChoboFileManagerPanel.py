@@ -10,6 +10,7 @@ class ChoboFileManagerPanel(wx.Panel):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerPanel, self).__init__(*args, **kw)
         self.fileManager = FileManager.FileManager()
+        self.urlManger = UrlManager.UrlManager()
         self.drawUI()
 
     def OnClickGo(self, evt):
@@ -23,10 +24,10 @@ class ChoboFileManagerPanel(wx.Panel):
         if strUrl[:2] == "u:" or \
              strUrl[:2] == "U:":
             print("u :" + strUrl[2:])
-            UrlManager.UrlManager.openURL(strUrl[2:])
+            self.urlManger.openURL(strUrl[2:])
 
         elif UrlManager.UrlManager.isURL(strUrl):
-            UrlManager.UrlManager.openURL(strUrl)
+            self.urlManger.openURL(strUrl)
 
         elif strUrl[:2] == "f:" or \
            strUrl[:2] == "F:":
@@ -35,6 +36,9 @@ class ChoboFileManagerPanel(wx.Panel):
 
         elif self.fileManager.updateCurrentFolder(strUrl) == True:
             self.fileList.update(self.fileManager.getFileList())
+
+        else:
+            UrlManager.UrlManager.openURL2(strUrl)
 
         self.urlText.SetValue(self.fileManager.getCurrentDir())
 
@@ -167,6 +171,7 @@ class ChoboFileManagerPanel(wx.Panel):
                                  #| wx.LC_HRULES
                                  #| wx.LC_SINGLE_SEL
                                  )
+        self.urlManger.setCtrlList(self.urlList)
         sizer.Add(self.urlList, 1, wx.EXPAND)
 
         ##
