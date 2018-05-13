@@ -110,6 +110,9 @@ class ChoboFileManagerPanel(wx.Panel):
     def needSave(self):
         return self.urlManger.needSave()
 
+    def saveData(self):
+        self.urlManger.saveURL()
+
     def drawUI(self):
         print ("drawUI")
         sizer = wx.BoxSizer(wx.VERTICAL)
