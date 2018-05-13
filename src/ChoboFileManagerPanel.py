@@ -124,31 +124,14 @@ class ChoboFileManagerPanel(wx.Panel):
         self.urlText.Bind(wx.EVT_TEXT_ENTER, self.onUrlGo)
         urlBox.Add(self.urlText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        #self.urlText = wx.TextCtrl(self, -1, " ",size=(400,-1))
-        #urlBox.Add(self.urlText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        #self.urlGoBtn = wx.Button(self, 10, "Go", size=(30,30))
-        #self.urlGoBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
-        #urlBox.Add(self.urlGoBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-        #
-        #self.urlClearBtn = wx.Button(self, 10, "Clear", size=(30,30))
-        #self.urlClearBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
-        #urlBox.Add(self.urlClearBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
         sizer.Add(urlBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         ## FileListCtrl
         fileListID = wx.NewId()
         self.fileList = FileListCtrl.FileListCtrl(self, fileListID,
                                  style=wx.LC_REPORT
-                                 #| wx.BORDER_SUNKEN
                                  | wx.BORDER_NONE
                                  | wx.LC_EDIT_LABELS
-                                 #| wx.LC_SORT_ASCENDING    # disabling initial auto sort gives a
-                                 #| wx.LC_NO_HEADER         # better illustration of col-click sorting
-                                 #| wx.LC_VRULES
-                                 #| wx.LC_HRULES
-                                 #| wx.LC_SINGLE_SEL
                                  )
         self.fileList.update(self.fileManager.getFileList())
         self.fileList.setPanel(self)
@@ -162,16 +145,7 @@ class ChoboFileManagerPanel(wx.Panel):
         fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER|wx.TE_MULTILINE,size=(500,25))
         self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
-        #self.cmdText = wx.TextCtrl(self, -1, " ",size=(400,-1))
         fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-        #
-        #self.cmdBtn = wx.Button(self, 10, "Run", size=(30,30))
-        #self.cmdBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
-        #fileMngBtnBox.Add(self.cmdBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-        #
-        #self.cmdClearBtn = wx.Button(self, 10, "Clear", size=(30,30))
-        #self.cmdClearBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
-        #fileMngBtnBox.Add(self.cmdClearBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
@@ -180,14 +154,8 @@ class ChoboFileManagerPanel(wx.Panel):
         urlListID = wx.NewId()
         self.urlList = UrlListCtrl.UrlListCtrl(self, urlListID,
                                  style=wx.LC_REPORT
-                                 #| wx.BORDER_SUNKEN
                                  | wx.BORDER_NONE
                                  | wx.LC_EDIT_LABELS
-                                 #| wx.LC_SORT_ASCENDING    # disabling initial auto sort gives a
-                                 #| wx.LC_NO_HEADER         # better illustration of col-click sorting
-                                 #| wx.LC_VRULES
-                                 #| wx.LC_HRULES
-                                 #| wx.LC_SINGLE_SEL
                                  )
         self.urlManger.setCtrlList(self.urlList)
         sizer.Add(self.urlList, 1, wx.EXPAND)

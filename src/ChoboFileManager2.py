@@ -19,11 +19,6 @@ class ChoboFileManagerFrame(wx.Frame):
 
     def onCloseApp(self, event):
         if event.CanVeto() and self.panel.needSave():
-            #if wx.MessageBox("There is UnSaved data. Continue closing?\n You will lost unSaved data!",
-            #    "Please confirm",
-            #    wx.ICON_QUESTION | wx.YES_NO) != wx.YES:
-            #    event.Veto()
-            #    return
             self.panel.saveData()
         self.Destroy()
 
