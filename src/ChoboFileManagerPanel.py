@@ -15,6 +15,7 @@ class ChoboFileManagerPanel(wx.Panel):
 
     def OnSaveURL(self, evt):
         print ("OnSaveURL")
+        self.urlManger.saveURL()
         
     def OnClearURL(self, evt):
         self.urlManger.clearAll()
@@ -57,6 +58,8 @@ class ChoboFileManagerPanel(wx.Panel):
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
+        elif UrlManager.UrlManager.isURL(strUrl):
+            self.urlManger.openURL(strUrl)
         else:
             os.system("start " + tmpCmd)
         self.cmdText.SetValue("")
@@ -103,6 +106,9 @@ class ChoboFileManagerPanel(wx.Panel):
               "lmx." == url[:-5:-1].lower() or \
               "gol." == url[:-5:-1].lower()):
             self.on_runtxt(url)
+
+    def needSave(self):
+        return self.urlManger.needSave()
 
     def drawUI(self):
         print ("drawUI")

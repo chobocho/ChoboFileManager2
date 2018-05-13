@@ -8,8 +8,12 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
+        self.Bind(wx.EVT_RIGHT_UP, self.onRightClick)
         self.Bind(wx.EVT_LEFT_DCLICK, self.onDoubleClick)
         self.addColumn()
+
+    def setUrlManager(self, urlManager):
+        self.urlManager = urlManager
 
     def addColumn(self):
         self.InsertColumn(0, "ID", width=30)
@@ -24,6 +28,14 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         url.append(self.GetItem(idx, 2).GetText())
         return url
   
+    def getSelectedUrlItem(self):
+        url = []
+        if (self.currentItem != -1):
+            idx = self.currentItem
+            url.append(self.GetItem(idx, 1).GetText())
+            url.append(self.GetItem(idx, 2).GetText())
+        return url
+
     def getSelectedUrl(self):
         if (self.currentItem != -1):
             return self.getUrlInfo(self.currentItem)[0]
@@ -34,6 +46,9 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         if (self.currentItem != -1):
             print ("DK: " + self.getUrlInfo(self.currentItem)[0])
             UrlManager.UrlManager.openURL2(self.getUrlInfo(self.currentItem)[0])
+
+    def onRightClick(self, evt):
+        self.urlManager.updateUrl()
 
     def onItemSelected(self, evt):
         self.currentItem = evt.Index

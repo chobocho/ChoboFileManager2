@@ -16,10 +16,9 @@ class ChoboFileManagerFrame(wx.Frame):
         self.panel = ChoboFileManagerPanel.ChoboFileManagerPanel(self)
         ico = wx.Icon('disk.ico', wx.BITMAP_TYPE_ICO)
         self.SetIcon(ico)
-        self.hasUnSavedData = False
 
     def onCloseApp(self, event):
-        if event.CanVeto() and self.hasUnSavedData:
+        if event.CanVeto() and self.panel.needSave():
             if wx.MessageBox("Continue closing?",
                 "Please confirm",
                 wx.ICON_QUESTION | wx.YES_NO) != wx.YES:
