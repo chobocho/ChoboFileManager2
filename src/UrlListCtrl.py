@@ -52,6 +52,11 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 
     def onItemSelected(self, evt):
         self.currentItem = evt.Index
+        if (self.currentItem != -1) and wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(self.GetItem(self.currentItem, 1).GetText()))
+            wx.TheClipboard.Close()
+
+
  
     def update(self, urlList):
         self.DeleteAllItems()

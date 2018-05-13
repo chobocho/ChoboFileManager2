@@ -26,6 +26,10 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 
     def onItemSelected(self, evt):
         self.currentItem = evt.Index
+        if (self.currentItem != -1) and wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(wx.TextDataObject(self.GetItem(self.currentItem, 0).GetText()))
+            wx.TheClipboard.Close()
+
 
     def onDoubleClick(self, evt):
         if (self.currentItem != -1):
