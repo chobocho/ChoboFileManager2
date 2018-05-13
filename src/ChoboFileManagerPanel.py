@@ -59,6 +59,7 @@ class ChoboFileManagerPanel(wx.Panel):
            os.system("explorer " + self.fileManager.getCurrentDir())
         else:
             os.system("start " + tmpCmd)
+        self.cmdText.SetValue("")
 
     def on_runexe(self, exefile):
         print ("run " + exefile)
