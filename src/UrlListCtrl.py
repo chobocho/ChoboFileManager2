@@ -55,8 +55,6 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         if (self.currentItem != -1) and wx.TheClipboard.Open():
             wx.TheClipboard.SetData(wx.TextDataObject(self.GetItem(self.currentItem, 1).GetText()))
             wx.TheClipboard.Close()
-
-
  
     def update(self, urlList):
         self.DeleteAllItems()
@@ -69,3 +67,16 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 self.SetItemBackgroundColour(index, "Light blue")
         self.currentItem = -1
 
+    def updateWithFilter(self, urlList, filters):
+        self.DeleteAllItems()
+        urlCount = 0
+        for url in urlList:
+            if filters in url[0] or filters in url[1]:
+                index = self.InsertItem(self.GetItemCount(), url[0])
+                self.SetItem(index, 0, str(urlCount+1))
+                self.SetItem(index, 1, url[0])
+                self.SetItem(index, 2, url[1])
+                if index % 2 == 0:
+                    self.SetItemBackgroundColour(index, "Light blue")
+            urlCount = urlCount + 1
+        self.currentItem = -1

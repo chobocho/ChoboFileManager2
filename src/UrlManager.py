@@ -100,6 +100,12 @@ class UrlManager:
                 self.modifyUrl(url)
             dlg.Destroy()
 
+    def update(self):
+        self.ctrlList.update(self.urlList)
+
+    def updateWithFilter(self, filters):
+        self.ctrlList.updateWithFilter(self.urlList, filters)
+
     @staticmethod
     def isURL(url):
         if url.find("http:") != -1 or \

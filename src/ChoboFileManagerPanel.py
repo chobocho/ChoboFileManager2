@@ -53,13 +53,25 @@ class ChoboFileManagerPanel(wx.Panel):
         tmpCmd = self.cmdText.GetValue().strip()
         self.cmdText.SetValue("")
 
-        print ("run cmd " + tmpCmd)
+        if len(tmpCmd) == 0:
+           return
+
         if (tmpCmd.lower() == "update"):
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
         elif UrlManager.UrlManager.isURL(tmpCmd):
             self.urlManger.openURL(tmpCmd)
+        elif 'fs:' in tmpCmd[:3].lower():
+            if len(tmpCmd[3:]) > 0:
+                self.fileList.filteredUpdate(self.fileManager.getFileList(), tmpCmd[3:])
+            else:
+                self.fileList.update(self.fileManager.getFileList())
+        elif 'fu:' in tmpCmd[:3].lower():
+            if len(tmpCmd[3:]) > 0:
+                self.urlManger.updateWithFilter(tmpCmd[3:])
+            else:
+                self.urlManger.update()
         else:
             os.system("start " + tmpCmd)
         self.cmdText.SetValue("")
