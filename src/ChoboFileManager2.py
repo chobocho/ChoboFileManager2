@@ -7,7 +7,7 @@ Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0514a"
+SW_TITLE = "ChoboFileManager2 V0627.0515a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):

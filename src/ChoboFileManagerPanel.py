@@ -51,17 +51,19 @@ class ChoboFileManagerPanel(wx.Panel):
 
     def onRunCmd(self, evt):
         tmpCmd = self.cmdText.GetValue().strip()
-        self.cmdText.SetValue("")
+        self.cmdText.SetValue("fu:")
 
         if len(tmpCmd) == 0:
            return
+        print (tmpCmd)
+
+        if tmpCmd[:4] == "fu:.":
+           tmpCmd = tmpCmd[4:]
 
         if (tmpCmd.lower() == "update"):
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
-        elif UrlManager.UrlManager.isURL(tmpCmd):
-            self.urlManger.openURL(tmpCmd)
         elif 'fs:' in tmpCmd[:3].lower():
             if len(tmpCmd[3:]) > 0:
                 self.fileList.filteredUpdate(self.fileManager.getFileList(), tmpCmd[3:])
@@ -72,9 +74,10 @@ class ChoboFileManagerPanel(wx.Panel):
                 self.urlManger.updateWithFilter(tmpCmd[3:])
             else:
                 self.urlManger.update()
+        elif UrlManager.UrlManager.isURL(tmpCmd):
+            self.urlManger.openURL(tmpCmd)
         else:
             os.system("start " + tmpCmd)
-        self.cmdText.SetValue("")
 
     def on_runexe(self, exefile):
         print ("run " + exefile)
@@ -158,8 +161,9 @@ class ChoboFileManagerPanel(wx.Panel):
         fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
         self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
+        self.cmdText.SetValue("fu:")
         fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
+        
         sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
 
