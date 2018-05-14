@@ -8,6 +8,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onItemSelected)
         self.Bind(wx.EVT_LEFT_DCLICK, self.onDoubleClick)
+        self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onDoubleClick)
         self.addColumn()
 
     def setPanel(self, panel):
@@ -30,7 +31,6 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             wx.TheClipboard.SetData(wx.TextDataObject(self.GetItem(self.currentItem, 0).GetText()))
             wx.TheClipboard.Close()
 
-
     def onDoubleClick(self, evt):
         if (self.currentItem != -1):
             print ("DK: " + self.getFileInfo(self.currentItem)[0])
@@ -42,10 +42,14 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.InsertItem(self.GetItemCount(), file[0])
             self.SetItem(index, 0, file[0])
             self.SetItem(index, 1, file[1])
-            if index % 2 == 0:
-                self.SetItemBackgroundColour(index, "Light gray")
+
             if "exe." == file[0][:-5:-1] or \
                "tab." == file[0][:-5:-1]:
-                self.SetItemBackgroundColour(index, "Light blue")
+                self.SetItemBackgroundColour(index, "LIGHT BLUE")
+            elif "yp." == file[0][:-4:-1] or \
+               "wyp." == file[0][:-5:-1]:
+                self.SetItemBackgroundColour(index, "GREEN YELLOW")
+            elif "[" == file[0][0] and "]" == file[0][-1]:
+                self.SetItemBackgroundColour(index, "GOLDENROD")
 
  

@@ -7,15 +7,15 @@ Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0513a"
+SW_TITLE = "ChoboFileManager2 V0627.0514a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerFrame, self).__init__(*args, **kw)
         self.Bind(wx.EVT_CLOSE, self.onCloseApp)
         self.panel = ChoboFileManagerPanel.ChoboFileManagerPanel(self)
-        ico = wx.Icon('disk.ico', wx.BITMAP_TYPE_ICO)
-        self.SetIcon(ico)
+        #ico = wx.Icon('disk.ico', wx.BITMAP_TYPE_ICO)
+        #self.SetIcon(ico)
 
     def onCloseApp(self, event):
         if event.CanVeto() and self.panel.needSave():

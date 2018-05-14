@@ -58,8 +58,8 @@ class ChoboFileManagerPanel(wx.Panel):
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
-        elif UrlManager.UrlManager.isURL(strUrl):
-            self.urlManger.openURL(strUrl)
+        elif UrlManager.UrlManager.isURL(tmpCmd):
+            self.urlManger.openURL(tmpCmd)
         else:
             os.system("start " + tmpCmd)
         self.cmdText.SetValue("")
@@ -106,6 +106,7 @@ class ChoboFileManagerPanel(wx.Panel):
               "lmx." == url[:-5:-1].lower() or \
               "gol." == url[:-5:-1].lower()):
             self.on_runtxt(url)
+        self.urlText.SetValue(self.fileManager.getCurrentDir())
 
     def needSave(self):
         return self.urlManger.needSave()
@@ -120,10 +121,10 @@ class ChoboFileManagerPanel(wx.Panel):
         ##
         urlBox = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.urlText = wx.TextCtrl(self,style = wx.TE_PROCESS_ENTER|wx.TE_MULTILINE,size=(500,25))
+        self.urlText = wx.TextCtrl(self,style = wx.TE_PROCESS_ENTER,size=(500,25))
         self.urlText.Bind(wx.EVT_TEXT_ENTER, self.onUrlGo)
+        self.urlText.SetValue(self.fileManager.getCurrentDir())
         urlBox.Add(self.urlText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
         sizer.Add(urlBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         ## FileListCtrl
@@ -143,7 +144,7 @@ class ChoboFileManagerPanel(wx.Panel):
         
         self.cmdLbl = wx.StaticText(self, -1, "Cmd")
         fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER|wx.TE_MULTILINE,size=(500,25))
+        self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
         self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
         fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
