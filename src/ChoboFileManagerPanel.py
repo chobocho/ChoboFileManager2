@@ -17,6 +17,22 @@ class ChoboFileManagerPanel(wx.Panel):
         print ("OnSaveURL")
         self.urlManger.saveURL()
         
+    def OnExportUrlToHtml(self, evt):
+        print ("OnExportUrlToHtml")
+        htmlFilePath = ""
+        dlg = wx.FileDialog(
+            self, message="Save file as ...", defaultDir=os.getcwd(),
+            defaultFile="", wildcard="Html file (*.html)|*.htm", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT
+            )
+        dlg.SetFilterIndex(2)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            htmlFilePath = dlg.GetPath()
+        dlg.Destroy()
+
+        if len(htmlFilePath) > 0:
+            self.urlManger.exportToHtml("", htmlFilePath)
+
     def OnClearURL(self, evt):
         self.urlManger.clearAll()
 
@@ -184,9 +200,9 @@ class ChoboFileManagerPanel(wx.Panel):
         self.urlSaveBtn.Bind(wx.EVT_BUTTON, self.OnSaveURL)
         urlMngBtnBox.Add(self.urlSaveBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
-        #self.urlExportBtn = wx.Button(self, 10, "Export", size=(30,30))
-        #self.urlExportBtn.Bind(wx.EVT_BUTTON, self.OnClickGo)
-        #urlMngBtnBox.Add(self.urlExportBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.urlExportBtn = wx.Button(self, 10, "Export", size=(30,30))
+        self.urlExportBtn.Bind(wx.EVT_BUTTON, self.OnExportUrlToHtml)
+        urlMngBtnBox.Add(self.urlExportBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         self.urlDeleteBtn = wx.Button(self, 10, "Delete", size=(30,30))
         self.urlDeleteBtn.Bind(wx.EVT_BUTTON, self.OnDeleteURL)

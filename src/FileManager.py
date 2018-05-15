@@ -9,7 +9,7 @@ class FileManager:
     def getCurrentDir(self):
         return self.currDir
 
-    def getFileList(self):        
+    def getFileList(self):
         return self.fileList
 
     def updateCurrentFolder(self, newDir):

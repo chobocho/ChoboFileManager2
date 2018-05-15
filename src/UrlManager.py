@@ -11,14 +11,21 @@ class UrlManager:
         self.hasUnSaveData = False
 
     def loadURL(self):
-        if (os.path.isfile(self.urlSavedFileName)):
-            f = open(self.urlSavedFileName,'r')
-            for url in f:
-                tmpUrl = url.strip().split("(..)")
-                print(tmpUrl)
-                self.urlList.append(tmpUrl)
-            f.close()
-        else:
+        try:
+            if (os.path.isfile(self.urlSavedFileName)):
+                f = open(self.urlSavedFileName,'r')
+                for url in f:
+                    tmpUrl = url.strip().split("(..)")
+                    print(tmpUrl)
+                    self.urlList.append(tmpUrl)
+                f.close()
+            else:
+                self.initUrlList()
+        except:
+            dlg = wx.MessageDialog(None, 'Exception happened during closing CFM!',
+                     'ChoboFileManager2', wx.OK | wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
             self.initUrlList()
 
     def saveURL(self):
@@ -87,6 +94,66 @@ class UrlManager:
                    self.hasUnSaveData = True
                    break
             self.ctrlList.update(self.urlList)
+
+    def exportToHtml(self, filters, filePath):
+        try:
+            htmlHead='''
+            <html>
+            <head>
+            <title>ChoboFileManager2 URL list</title>
+            <style>
+            td {
+                text-align:center
+            }
+            
+            h10 {
+                color:white;
+            }
+            
+            a:link {
+                text-decoration: none;
+            }
+            
+            a:link, a:visited {
+                color: blue;
+            }
+            </style>
+            </head>
+            <body>
+            <center>
+            <table border="1" style="border-collapse:collapse; border:1px gray solid;">
+                <tr>
+                <td bgcolor=#00bfff>id</td>
+                <td bgcolor=#00bfff>URL</td>
+                <td bgcolor=#00bfff>Memo</td>
+                </tr>
+            '''
+            htmlTail='''
+            </table>
+            </body>
+            </html>
+            '''
+            f = open(filePath,'w')
+            f.write(htmlHead)
+            idx = 1
+            for url in self.urlList:
+                if len(filters) == 0 or filters.lower() in url[0].lower() or filters.lower() in url[1].lower(): 
+                    f.write("<tr>")
+                    bgcolor = ""
+                    if idx % 2 == 0:
+                        bgcolor = "bgcolor=#e6f2ff"
+                    tmpHtml = "<td {0}>&nbsp;{1}&nbsp;</td><td {0}><a href={2}>&nbsp;{2}&nbsp;</a></td><td {0}>&nbsp;{3}&nbsp;</td>".format(bgcolor, idx, url[0], url[1])
+                    print(tmpHtml)
+                    f.write(tmpHtml)
+                    f.write("</tr>")
+                    idx = idx + 1
+            f.write(htmlTail)
+            f.close()
+        except:
+            dlg = wx.MessageDialog(None, 'Exception happened during export to HTML!',
+                     'ChoboFileManager2', wx.OK | wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
 
     def updateUrl(self):
         print ("updateUrl")
