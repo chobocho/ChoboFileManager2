@@ -1,5 +1,4 @@
 import os
-from operator import itemgetter
 
 class FileManager:
     def __init__(self):
@@ -54,5 +53,5 @@ class FileManager:
                 tmpFile.append(filename)
                 tmpFile.append(str(os.path.getsize(fullfilename)))
             self.fileList.append(tmpFile)
-        #self.fileList.sort()
-        sorted(self.fileList, key=itemgetter(1))
+        self.fileList.sort(key=lambda x:x[0])
+        #sorted(self.fileList, key=itemgetter(1))

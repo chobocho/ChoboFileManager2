@@ -62,7 +62,7 @@ class ChoboFileManagerPanel(wx.Panel):
 
         if (tmpCmd.lower() == "update"):
             self.fileList.update(self.fileManager.getFileList())
-        elif (tmpCmd.lower() == "explore"):
+        elif (tmpCmd.lower() == "ex" or tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
         elif 'fs:' in tmpCmd[:3].lower():
             if len(tmpCmd[3:]) > 0:

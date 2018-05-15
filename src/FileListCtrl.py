@@ -62,7 +62,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         for file in fileList:
-            if filters in file[0]:
+            if filters.lower() in file[0].lower():
                 index = self.InsertItem(self.GetItemCount(), file[0])
                 self.SetItem(index, 0, file[0])
                 self.SetItem(index, 1, file[1])

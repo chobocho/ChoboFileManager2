@@ -7,7 +7,7 @@ Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0515a"
+SW_TITLE = "ChoboFileManager2 V0627.0516a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):
@@ -19,7 +19,13 @@ class ChoboFileManagerFrame(wx.Frame):
 
     def onCloseApp(self, event):
         if event.CanVeto() and self.panel.needSave():
-            self.panel.saveData()
+            try:
+               self.panel.saveData()
+            except:
+               dlg = wx.MessageDialog(self, 'Exception happened during closing CFM!',
+                        'ChoboFileManager2', wx.OK | wx.ICON_INFORMATION)
+               dlg.ShowModal()
+               dlg.Destroy()
         self.Destroy()
 
 
