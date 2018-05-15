@@ -38,7 +38,7 @@ class FileManager:
             return False
 
     def updateFilelist(self):
-        self.fileList= [["..", ""]]
+        self.fileList= []
         fileList = os.listdir(self.currDir)
         
         for filename in fileList:
@@ -54,4 +54,4 @@ class FileManager:
                 tmpFile.append(str(os.path.getsize(fullfilename)))
             self.fileList.append(tmpFile)
         self.fileList.sort(key=lambda x:x[0])
-        #sorted(self.fileList, key=itemgetter(1))
+        self.fileList.insert(0, ["..", ""])
