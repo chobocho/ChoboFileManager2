@@ -138,14 +138,14 @@ class UrlManager:
             idx = 1
             for url in self.urlList:
                 if len(filters) == 0 or filters.lower() in url[0].lower() or filters.lower() in url[1].lower(): 
-                    f.write("<tr>")
+                    f.write("<tr>\n")
                     bgcolor = ""
                     if idx % 2 == 0:
                         bgcolor = "bgcolor=#e6f2ff"
-                    tmpHtml = "<td {0}>&nbsp;{1}&nbsp;</td><td {0}><a href={2}>&nbsp;{2}&nbsp;</a></td><td {0}>&nbsp;{3}&nbsp;</td>".format(bgcolor, idx, url[0], url[1])
-                    print(tmpHtml)
+                    tmpHtml = "<td {0}>&nbsp;{1}&nbsp;</td>\n<td {0}><a href={2}>&nbsp;{2}&nbsp;</a></td>\n<td {0}>&nbsp;{3}&nbsp;</td>\n".format(bgcolor, idx, url[0], url[1])
+                    #print(tmpHtml)
                     f.write(tmpHtml)
-                    f.write("</tr>")
+                    f.write("</tr>\n")
                     idx = idx + 1
             f.write(htmlTail)
             f.close()
