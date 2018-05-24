@@ -71,7 +71,7 @@ class UrlListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
         urlCount = 0
         for url in urlList:
-            if filters in url[0] or filters in url[1]:
+            if filters.lower() in url[0].lower() or filters.lower() in url[1].lower():
                 index = self.InsertItem(self.GetItemCount(), url[0])
                 self.SetItem(index, 0, str(urlCount+1))
                 self.SetItem(index, 1, url[0])

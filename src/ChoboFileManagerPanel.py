@@ -6,6 +6,39 @@ import FileManager
 import UrlManager
 import os
 
+
+class FileCtrl2(wx.FileCtrl):
+    def __init__(self, parent, id=wx.ID_ANY, defaultDirectory="",
+                 defaultFilename="",
+                 wildCard=wx.FileSelectorDefaultWildcardStr,
+                 style=wx.FC_DEFAULT_STYLE
+                 # | wx.FC_OPEN
+                 # | wx.FC_SAVE
+                 # | wx.FC_MULTIPLE
+                  | wx.FC_NOSHOWHIDDEN
+                 ,pos=wx.DefaultPosition, size=wx.DefaultSize, name="filectrl", log=None):
+        wx.FileCtrl.__init__(self, parent, id, defaultDirectory, defaultFilename,
+                             wildCard, style, pos, size, name)
+
+        self.Bind(wx.EVT_FILECTRL_FILEACTIVATED, self.OnFileActivated)
+        self.Bind(wx.EVT_FILECTRL_SELECTIONCHANGED, self.OnSelectionChanged)
+        self.Bind(wx.EVT_FILECTRL_FOLDERCHANGED, self.OnFolderChanged)
+        self.Bind(wx.EVT_FILECTRL_FILTERCHANGED, self.OnFilterChanged)
+
+    def OnFileActivated(self, event):
+        print('File Activated: %s\n' % self.GetFilename())
+
+    def OnSelectionChanged(self, event):
+        print('Selection Changed: %s\n' % self.GetPath())
+
+    def OnFolderChanged(self, event):
+        print('Directory Changed: %s\n' % self.GetDirectory())
+
+    def OnFilterChanged(self, event):
+        print('Filter Changed: %s\n' % self.GetFilterIndex())
+
+
+
 class ChoboFileManagerPanel(wx.Panel):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerPanel, self).__init__(*args, **kw)
@@ -149,6 +182,9 @@ class ChoboFileManagerPanel(wx.Panel):
         print ("drawUI")
         sizer = wx.BoxSizer(wx.VERTICAL)
 
+        #self.fc = FileCtrl2(self, pos=(10,35))
+        #self.fc.SetSize((500,350))
+        #sizer.Add(self.fc, 1, wx.EXPAND)
         ##
         urlBox = wx.BoxSizer(wx.HORIZONTAL)
 

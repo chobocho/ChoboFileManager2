@@ -23,5 +23,9 @@ class TestStringMethods(unittest.TestCase):
         urlmanager = UrlManager.UrlManager()
         urlmanager.exportToHtml("com","test2.htm")
         self.assertTrue(os.path.isfile("test2.htm"))
+
+    def test_urlManager_updateWithFilteR(self):
+        urlmanager = UrlManager.UrlManager()
+
 if __name__ == '__main__':
     unittest.main()
