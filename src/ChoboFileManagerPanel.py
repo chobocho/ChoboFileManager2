@@ -6,71 +6,14 @@ import FileManager
 import UrlManager
 import os
 
-
-class FileCtrl2(wx.FileCtrl):
-    def __init__(self, parent, id=wx.ID_ANY, defaultDirectory="",
-                 defaultFilename="",
-                 wildCard=wx.FileSelectorDefaultWildcardStr,
-                 style=wx.FC_DEFAULT_STYLE
-                 # | wx.FC_OPEN
-                 # | wx.FC_SAVE
-                 # | wx.FC_MULTIPLE
-                  | wx.FC_NOSHOWHIDDEN
-                 ,pos=wx.DefaultPosition, size=wx.DefaultSize, name="filectrl", log=None):
-        wx.FileCtrl.__init__(self, parent, id, defaultDirectory, defaultFilename,
-                             wildCard, style, pos, size, name)
-
-        self.Bind(wx.EVT_FILECTRL_FILEACTIVATED, self.OnFileActivated)
-        self.Bind(wx.EVT_FILECTRL_SELECTIONCHANGED, self.OnSelectionChanged)
-        self.Bind(wx.EVT_FILECTRL_FOLDERCHANGED, self.OnFolderChanged)
-        self.Bind(wx.EVT_FILECTRL_FILTERCHANGED, self.OnFilterChanged)
-
-    def OnFileActivated(self, event):
-        print('File Activated: %s\n' % self.GetFilename())
-
-    def OnSelectionChanged(self, event):
-        print('Selection Changed: %s\n' % self.GetPath())
-
-    def OnFolderChanged(self, event):
-        print('Directory Changed: %s\n' % self.GetDirectory())
-
-    def OnFilterChanged(self, event):
-        print('Filter Changed: %s\n' % self.GetFilterIndex())
-
-
-
 class ChoboFileManagerPanel(wx.Panel):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerPanel, self).__init__(*args, **kw)
         self.fileManager = FileManager.FileManager()
-        self.urlManger = UrlManager.UrlManager()
         self.drawUI()
 
-    def OnSaveURL(self, evt):
-        print ("OnSaveURL")
-        self.urlManger.saveURL()
-        
-    def OnExportUrlToHtml(self, evt):
-        print ("OnExportUrlToHtml")
-        htmlFilePath = ""
-        dlg = wx.FileDialog(
-            self, message="Save file as ...", defaultDir=os.getcwd(),
-            defaultFile="", wildcard="Html file (*.html)|*.htm", style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT
-            )
-        dlg.SetFilterIndex(2)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            htmlFilePath = dlg.GetPath()
-        dlg.Destroy()
-
-        if len(htmlFilePath) > 0:
-            self.urlManger.exportToHtml("", htmlFilePath)
-
-    def OnClearURL(self, evt):
-        self.urlManger.clearAll()
-
-    def OnDeleteURL(self, evt):
-        self.urlManger.deleteUrl()
+    def setUrlManager(self, urlmanager):
+        self.urlManger = urlmanager
 
     def onUrlGo(self, evt):
         strUrl = self.urlText.GetValue()
@@ -100,31 +43,22 @@ class ChoboFileManagerPanel(wx.Panel):
 
     def onRunCmd(self, evt):
         tmpCmd = self.cmdText.GetValue().strip()
-        self.cmdText.SetValue("fu:")
+        self.cmdText.SetValue("")
 
         if len(tmpCmd) == 0:
+           self.fileList.update(self.fileManager.getFileList())
            return
         print (tmpCmd)
-
-        if tmpCmd[:4] == "fu:.":
-           tmpCmd = tmpCmd[4:]
 
         if (tmpCmd.lower() == "update"):
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "ex" or tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
-        elif 'fs:' in tmpCmd[:3].lower():
-            if len(tmpCmd[3:]) > 0:
-                self.fileList.filteredUpdate(self.fileManager.getFileList(), tmpCmd[3:])
+        elif '/' in tmpCmd[0].lower():
+            if len(tmpCmd) > 1:
+                self.fileList.filteredUpdate(self.fileManager.getFileList(), tmpCmd[1:])
             else:
                 self.fileList.update(self.fileManager.getFileList())
-        elif 'fu:' in tmpCmd[:3].lower():
-            if len(tmpCmd[3:]) > 0:
-                self.urlManger.updateWithFilter(tmpCmd[3:])
-            else:
-                self.urlManger.update()
-        elif UrlManager.UrlManager.isURL(tmpCmd):
-            self.urlManger.openURL(tmpCmd)
         else:
             os.system("start " + tmpCmd)
 
@@ -172,20 +106,11 @@ class ChoboFileManagerPanel(wx.Panel):
             self.on_runtxt(url)
         self.urlText.SetValue(self.fileManager.getCurrentDir())
 
-    def needSave(self):
-        return self.urlManger.needSave()
-
-    def saveData(self):
-        self.urlManger.saveURL()
 
     def drawUI(self):
         print ("drawUI")
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        #self.fc = FileCtrl2(self, pos=(10,35))
-        #self.fc.SetSize((500,350))
-        #sizer.Add(self.fc, 1, wx.EXPAND)
-        ##
         urlBox = wx.BoxSizer(wx.HORIZONTAL)
 
         self.urlText = wx.TextCtrl(self,style = wx.TE_PROCESS_ENTER,size=(500,25))
@@ -209,46 +134,14 @@ class ChoboFileManagerPanel(wx.Panel):
         fileMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
 
         
-        self.cmdLbl = wx.StaticText(self, -1, "Cmd")
+        self.cmdLbl = wx.StaticText(self, -1, "File cmd")
         fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
         self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
-        self.cmdText.SetValue("fu:")
+        self.cmdText.SetValue("")
         fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         
         sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
-
-        ## UrlListCtrl
-        urlListID = wx.NewId()
-        self.urlList = UrlListCtrl.UrlListCtrl(self, urlListID,
-                                 style=wx.LC_REPORT
-                                 | wx.BORDER_NONE
-                                 | wx.LC_EDIT_LABELS
-                                 )
-        self.urlManger.setCtrlList(self.urlList)
-        sizer.Add(self.urlList, 1, wx.EXPAND)
-
-        ##
-        urlMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
-
-        self.urlSaveBtn = wx.Button(self, 10, "Save URL", size=(30,30))
-        self.urlSaveBtn.Bind(wx.EVT_BUTTON, self.OnSaveURL)
-        urlMngBtnBox.Add(self.urlSaveBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        self.urlExportBtn = wx.Button(self, 10, "Export", size=(30,30))
-        self.urlExportBtn.Bind(wx.EVT_BUTTON, self.OnExportUrlToHtml)
-        urlMngBtnBox.Add(self.urlExportBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        self.urlDeleteBtn = wx.Button(self, 10, "Delete", size=(30,30))
-        self.urlDeleteBtn.Bind(wx.EVT_BUTTON, self.OnDeleteURL)
-        urlMngBtnBox.Add(self.urlDeleteBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        self.urlClearBtn = wx.Button(self, 10, "Clear", size=(30,30))
-        self.urlClearBtn.Bind(wx.EVT_BUTTON, self.OnClearURL)
-        urlMngBtnBox.Add(self.urlClearBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-
-        sizer.Add(urlMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(True)

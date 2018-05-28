@@ -62,7 +62,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         for file in fileList:
-            if filters.lower() in file[0].lower():
+            if filters.lower() in file[0].lower() or ".." == file[0]:
                 index = self.InsertItem(self.GetItemCount(), file[0])
                 self.SetItem(index, 0, file[0])
                 self.SetItem(index, 1, file[1])
@@ -75,6 +75,7 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                     self.SetItemBackgroundColour(index, "GREEN YELLOW")
                 elif "[" == file[0][0] and "]" == file[0][-1]:
                     self.SetItemBackgroundColour(index, "GOLDENROD")
+
 
 
  
