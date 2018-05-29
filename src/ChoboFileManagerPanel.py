@@ -62,6 +62,12 @@ class ChoboFileManagerPanel(wx.Panel):
         else:
             os.system("start " + tmpCmd)
 
+    def onFind(self, keyword):
+        if len(keyword) > 0:
+            self.fileList.filteredUpdate(self.fileManager.getFileList(), keyword)
+        else:
+            self.fileList.update(self.fileManager.getFileList())
+
     def on_runexe(self, exefile):
         print ("run " + exefile)
         os.system("start " + exefile)

@@ -9,12 +9,19 @@ Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0528a"
+SW_TITLE = "ChoboFileManager2 V0627.0529a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerFrame, self).__init__(*args, **kw)
         self.Bind(wx.EVT_CLOSE, self.onCloseApp)
+        ctrl_F_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFind, id=ctrl_F_Id)
+        ctrl_Q_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onClose, id=ctrl_Q_Id)
+        accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('F'), ctrl_F_Id ),
+                                         (wx.ACCEL_CTRL,  ord('Q'), ctrl_Q_Id )])
+        self.SetAcceleratorTable(accel_tbl)
 
         self.splitter = wx.SplitterWindow(self, -1, wx.Point(0, 0), wx.Size(800, 800), wx.SP_3D | wx.SP_BORDER)
         self.urlManger = UrlManager.UrlManager()
@@ -32,6 +39,20 @@ class ChoboFileManagerFrame(wx.Frame):
 
         #ico = wx.Icon('disk.ico', wx.BITMAP_TYPE_ICO)
         #self.SetIcon(ico)
+
+    def onFind(self, event):
+        dlg = wx.TextEntryDialog(None, 'Input keyword','Find')
+        dlg.SetValue("")
+
+        if dlg.ShowModal() == wx.ID_OK:
+            keyword = dlg.GetValue()
+            self.fileManagerPanel.onFind(keyword)
+            self.urlManagerPanel.onFind(keyword)
+        dlg.Destroy()
+
+
+    def onClose(self, event):
+        self.Close()
 
     def onCloseApp(self, event):
         if event.CanVeto() and self.urlManagerPanel.needSave():

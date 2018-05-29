@@ -56,6 +56,12 @@ class ChoboUrlManagerPanel(wx.Panel):
         elif UrlManager.UrlManager.isURL(tmpCmd):
             self.urlManger.openURL(tmpCmd)
 
+    def onFind(self, keyword):
+        if len(keyword) > 0:
+            self.urlManger.updateWithFilter(keyword)
+        else:
+            self.urlManger.update()
+
     def on_runexe(self, exefile):
         print ("run " + exefile)
         os.system("start " + exefile)
@@ -68,8 +74,21 @@ class ChoboUrlManagerPanel(wx.Panel):
 
     def drawUI(self):
         print ("drawUI")
+        self.SetBackgroundColour('LIGHT GREY')
         sizer = wx.BoxSizer(wx.VERTICAL)
 
+        ##
+        fileMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
+
+        
+        self.cmdLbl = wx.StaticText(self, -1, "Url cmd")
+        fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
+        self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
+        self.cmdText.SetValue("")
+        fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        
+        sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         ## UrlListCtrl
         urlListID = wx.NewId()
         self.urlList = UrlListCtrl.UrlListCtrl(self, urlListID,
@@ -100,19 +119,7 @@ class ChoboUrlManagerPanel(wx.Panel):
         urlMngBtnBox.Add(self.urlClearBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
 
         sizer.Add(urlMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
+        
         ##
-        fileMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
-
-        
-        self.cmdLbl = wx.StaticText(self, -1, "Url cmd")
-        fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-        self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
-        self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
-        self.cmdText.SetValue("")
-        fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
-        
-        sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
