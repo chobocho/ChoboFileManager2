@@ -13,6 +13,9 @@ class ChoboUrlManagerPanel(wx.Panel):
     def setUrlManager(self, urlmanager):
         self.urlManger = urlmanager
 
+    def setFocusOnCmdText(self):
+        self.cmdText.SetFocus()
+
     def OnSaveURL(self, evt):
         print ("OnSaveURL")
         self.urlManger.saveURL()

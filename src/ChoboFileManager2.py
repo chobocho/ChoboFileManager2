@@ -9,7 +9,7 @@ Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0529a"
+SW_TITLE = "ChoboFileManager2 V0627.0530a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):
@@ -17,9 +17,18 @@ class ChoboFileManagerFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.onCloseApp)
         ctrl_F_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFind, id=ctrl_F_Id)
+        ctrl_O_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnUrl, id=ctrl_O_Id)
+        ctrl_D_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnFileCMD, id=ctrl_D_Id)
+        ctrl_U_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnUrlCMD, id=ctrl_U_Id)
         ctrl_Q_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onClose, id=ctrl_Q_Id)
         accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('F'), ctrl_F_Id ),
+                                         (wx.ACCEL_CTRL,  ord('O'), ctrl_O_Id ),
+                                         (wx.ACCEL_CTRL,  ord('D'), ctrl_D_Id ),
+                                         (wx.ACCEL_CTRL,  ord('U'), ctrl_U_Id ),
                                          (wx.ACCEL_CTRL,  ord('Q'), ctrl_Q_Id )])
         self.SetAcceleratorTable(accel_tbl)
 
@@ -50,6 +59,18 @@ class ChoboFileManagerFrame(wx.Frame):
             self.urlManagerPanel.onFind(keyword)
         dlg.Destroy()
 
+
+    def onFocusOnUrl(self, event):
+        print ("onFocusOnUrl")
+        self.fileManagerPanel.setFocusOnUrlText()
+
+    def onFocusOnFileCMD(self, event):
+        print ("onFocusOnFileCMD")
+        self.fileManagerPanel.setFocusOnCmdText()
+
+    def onFocusOnUrlCMD(self, event):
+        print ("onFocusOnUrlCMD")
+        self.urlManagerPanel.setFocusOnCmdText()
 
     def onClose(self, event):
         self.Close()

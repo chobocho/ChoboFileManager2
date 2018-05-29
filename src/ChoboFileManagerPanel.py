@@ -15,6 +15,12 @@ class ChoboFileManagerPanel(wx.Panel):
     def setUrlManager(self, urlmanager):
         self.urlManger = urlmanager
 
+    def setFocusOnUrlText(self):
+        self.urlText.SetFocus()
+
+    def setFocusOnCmdText(self):
+        self.cmdText.SetFocus()
+
     def onUrlGo(self, evt):
         strUrl = self.urlText.GetValue()
 
