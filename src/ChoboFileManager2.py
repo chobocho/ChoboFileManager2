@@ -20,6 +20,8 @@ class ChoboFileManagerFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onFocusOnFileCMD, id=ctrl_D_Id)
         ctrl_F_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFind, id=ctrl_F_Id)
+        ctrl_G_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onGoFolder, id=ctrl_G_Id)
         ctrl_L_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFocusOnUrl, id=ctrl_L_Id)
         ctrl_P_Id = wx.NewId()
@@ -33,12 +35,12 @@ class ChoboFileManagerFrame(wx.Frame):
 
         alt_F_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFocusOnFileList, id=alt_F_Id)
-
         alt_U_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFocusOnUrlList, id=alt_U_Id)
 
-        accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('F'), ctrl_F_Id ),
-                                         (wx.ACCEL_CTRL,  ord('D'), ctrl_D_Id ),
+        accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('D'), ctrl_D_Id ),
+                                         (wx.ACCEL_CTRL,  ord('F'), ctrl_F_Id ),
+                                         (wx.ACCEL_CTRL,  ord('G'), ctrl_G_Id ),
                                          (wx.ACCEL_CTRL,  ord('L'), ctrl_L_Id ),
                                          (wx.ACCEL_CTRL,  ord('P'), ctrl_P_Id ),
                                          (wx.ACCEL_CTRL,  ord('R'), ctrl_R_Id ),
@@ -75,6 +77,14 @@ class ChoboFileManagerFrame(wx.Frame):
             self.urlManagerPanel.onFind(keyword)
         dlg.Destroy()
 
+    def onGoFolder(self, event):
+        folder = self.urlManagerPanel.getCurrentURL()
+        print ("onGoFolder " + folder)
+        if folder.find("://") == -1:
+            self.fileManagerPanel.onGoToFolder(folder)
+        else:
+            print ("onGoFolder : it is not folder " + folder)
+
     def onRunPaint(self, event):
         print ("onRunPaint")
         ci = CommandInterpreter.CommandInterpreter()
@@ -90,8 +100,9 @@ class ChoboFileManagerFrame(wx.Frame):
             command = dlg.GetValue()
         dlg.Destroy()
         print (command)
-        ci = CommandInterpreter.CommandInterpreter()
-        ci.run(command)
+        if command != "-1":
+            ci = CommandInterpreter.CommandInterpreter()
+            ci.run(command)
 
     def onFocusOnUrl(self, event):
         print ("onFocusOnUrl")

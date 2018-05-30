@@ -85,6 +85,9 @@ class UrlManager:
             else:
                 print ("Error! URL data is mismatch!")
 
+    def getCurrentURL(self):
+        return self.ctrlList.getSelectedUrl()
+
     def modifyUrl(self, url):
         if (url != ""):
             for u in self.urlList:

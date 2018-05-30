@@ -77,6 +77,12 @@ class ChoboFileManagerPanel(wx.Panel):
         else:
             self.fileList.update(self.fileManager.getFileList())
 
+    def onGoToFolder(self, folder):
+        if self.fileManager.updateCurrentFolder(folder) == True:
+            self.fileList.update(self.fileManager.getFileList())
+        else:
+            print("onGoToFolder failed")
+
     def on_runexe(self, exefile):
         print ("run " + exefile)
         os.system("start " + exefile)

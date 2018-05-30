@@ -45,6 +45,9 @@ class ChoboUrlManagerPanel(wx.Panel):
     def OnDeleteURL(self, evt):
         self.urlManger.deleteUrl()
 
+    def getCurrentURL(self):
+        return self.urlManger.getCurrentURL()
+
     def onRunCmd(self, evt):
         tmpCmd = self.cmdText.GetValue().strip()
         self.cmdText.SetValue("")
