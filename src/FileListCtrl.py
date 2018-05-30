@@ -54,6 +54,10 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             elif "yp." == file[0][:-4:-1].lower() or \
                "wyp." == file[0][:-5:-1].lower():
                 self.SetItemBackgroundColour(index, "GREEN YELLOW")
+            elif "fdp." == file[0][:-5:-1].lower() or \
+                 "mth." == file[0][:-5:-1].lower() or \
+                 "lmth." == file[0][:-6:-1].lower():
+                self.SetItemBackgroundColour(index, "LIME GREEN")
             elif "[" == file[0][0] and "]" == file[0][-1]:
                 self.SetItemBackgroundColour(index, "GOLDENROD")
 
@@ -73,6 +77,10 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 elif "yp." == file[0][:-4:-1].lower() or \
                    "wyp." == file[0][:-5:-1].lower():
                     self.SetItemBackgroundColour(index, "GREEN YELLOW")
+                elif "fdp." == file[0][:-5:-1].lower() or \
+                     "mth." == file[0][:-5:-1].lower() or \
+                     "lmth." == file[0][:-6:-1].lower():
+                    self.SetItemBackgroundColour(index, "LIME GREEN")
                 elif "[" == file[0][0] and "]" == file[0][-1]:
                     self.SetItemBackgroundColour(index, "GOLDENROD")
 

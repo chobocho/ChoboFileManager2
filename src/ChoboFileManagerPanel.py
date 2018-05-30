@@ -4,6 +4,7 @@ import FileListCtrl
 import UrlListCtrl
 import FileManager
 import UrlManager
+import random
 import os
 
 class ChoboFileManagerPanel(wx.Panel):
@@ -59,7 +60,8 @@ class ChoboFileManagerPanel(wx.Panel):
            return
         print (tmpCmd)
 
-        if (tmpCmd.lower() == "update"):
+        if (tmpCmd.lower() == "update") or (tmpCmd.lower() == "up"):
+            self.fileManager.updateFilelist()
             self.fileList.update(self.fileManager.getFileList())
         elif (tmpCmd.lower() == "ex" or tmpCmd.lower() == "explore"):
            os.system("explorer " + self.fileManager.getCurrentDir())
@@ -87,12 +89,6 @@ class ChoboFileManagerPanel(wx.Panel):
         print ("run " + exefile)
         os.system("start " + exefile)
 
-    def on_runFireFox(self, datafile):
-        print ("on_runFireFox " + datafile)
-        msg = "start \"\" /max " + datafile
-        print (msg)
-        os.system(msg)
-
     def on_runPython(sefl, pythonFile):
         print ("run python " + pythonFile)
         os.system("start python " + pythonFile)
@@ -100,6 +96,64 @@ class ChoboFileManagerPanel(wx.Panel):
     def on_runtxt(self, txtfile):
         print ("run " + txtfile)
         os.system("start notepad " + txtfile)
+
+    def OnFileRename(self, evt):
+        selectedFile = self.fileList.getSelectedFile()
+        if '[' == selectedFile[0] and ']' == selectedFile[-1]:
+            selectedFile = selectedFile[1:-1]
+       
+        print ("OnFileRename: " + selectedFile)
+        if len(selectedFile) == 0:
+            return
+
+        newFileName = ""
+        dlg = wx.TextEntryDialog(None, 'Input new fild name','Rename')
+        dlg.SetValue(selectedFile)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            newFileName = dlg.GetValue()
+            print (selectedFile + " -> " + newFileName)
+        dlg.Destroy()
+        
+        if newFileName.lower() == selectedFile.lower():
+            print ("OnFileRename: It is same filename!")
+            return
+
+        try:
+            os.rename(selectedFile, newFileName)
+            self.fileManager.updateFilelist()
+            self.fileList.update(self.fileManager.getFileList())
+        except:
+            print ("OnFileRename: It is failed to rename!")
+
+    def OnNewFolder(self, evt):
+        print ("OnNewFolder")
+        defaultFolderName = "cfm0627_" + str(int(random.random()*100000)+1)
+        newfolder = ""
+        dlg = wx.TextEntryDialog(None, 'Input new folder name','New folder')
+        dlg.SetValue(defaultFolderName)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            newfolder = dlg.GetValue()
+            print (newfolder)
+        dlg.Destroy()
+
+        try:
+           if len(newfolder) > 1:
+               os.mkdir(newfolder)
+               self.fileManager.updateFilelist()
+               self.fileList.update(self.fileManager.getFileList())
+        except:
+           print("it is failed to make a new folder!")
+
+
+    def OnRunExplore(self, evt):
+        os.system("explorer " + self.fileManager.getCurrentDir())
+        print ("OnRunExplore")
+
+    def OnRunNotepad(self, evt):
+        print ("OnRunNotepad")
+        os.system("start notepad")
 
     def handleFileListEvnet(self, url):
         print ("Event")
@@ -118,15 +172,15 @@ class ChoboFileManagerPanel(wx.Panel):
                 self.fileList.update(self.fileManager.getFileList())
  
         elif "exe." == url[:-5:-1].lower() or \
-             "tab." == url[:-5:-1].lower():
+             "tab." == url[:-5:-1].lower() or \
+             "fdp." == url[:-5:-1].lower() or \
+             "mth." == url[:-5:-1].lower() or \
+             "lmth." == url[:-6:-1].lower():
             self.on_runexe(url)
      
         elif ("yp." == url[:-4:-1].lower() or \
               "wyp." == url[:-5:-1].lower()):
             self.on_runPython(url)
-
-        elif "fdp." == url[:-5:-1].lower():
-            self.on_runFireFox(url)
 
         elif ("txt." == url[:-5:-1].lower() or \
               "pac." == url[:-5:-1].lower() or \
@@ -135,6 +189,8 @@ class ChoboFileManagerPanel(wx.Panel):
               "gol." == url[:-5:-1].lower()):
             self.on_runtxt(url)
         self.urlText.SetValue(self.fileManager.getCurrentDir())
+        self.fileManager.updateFilelist()
+        self.fileList.update(self.fileManager.getFileList())
 
 
     def drawUI(self):
@@ -161,16 +217,37 @@ class ChoboFileManagerPanel(wx.Panel):
         sizer.Add(self.fileList, 1, wx.EXPAND)
 
         ##
-        fileMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
+        fileCmdBox = wx.BoxSizer(wx.HORIZONTAL)
 
         
         self.cmdLbl = wx.StaticText(self, -1, "File cmd")
-        fileMngBtnBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
+        fileCmdBox.Add(self.cmdLbl, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
         self.cmdText = wx.TextCtrl(self, style = wx.TE_PROCESS_ENTER,size=(500,25))
         self.cmdText.Bind(wx.EVT_TEXT_ENTER, self.onRunCmd)
         self.cmdText.SetValue("")
-        fileMngBtnBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+        fileCmdBox.Add(self.cmdText, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         
+        sizer.Add(fileCmdBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
+
+        ##
+        fileMngBtnBox = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.fileRenameBtn = wx.Button(self, 10, "Rename", size=(30,30))
+        self.fileRenameBtn.Bind(wx.EVT_BUTTON, self.OnFileRename)
+        fileMngBtnBox.Add(self.fileRenameBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        self.newFolderBtn = wx.Button(self, 10, "New Folder", size=(30,30))
+        self.newFolderBtn.Bind(wx.EVT_BUTTON, self.OnNewFolder)
+        fileMngBtnBox.Add(self.newFolderBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        self.exploreBtn = wx.Button(self, 10, "Explore", size=(30,30))
+        self.exploreBtn.Bind(wx.EVT_BUTTON, self.OnRunExplore)
+        fileMngBtnBox.Add(self.exploreBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
+        self.notePadBtn = wx.Button(self, 10, "Notepad", size=(30,30))
+        self.notePadBtn.Bind(wx.EVT_BUTTON, self.OnRunNotepad)
+        fileMngBtnBox.Add(self.notePadBtn, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
+
         sizer.Add(fileMngBtnBox, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         self.SetSizer(sizer)
