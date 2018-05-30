@@ -6,7 +6,7 @@
 * Ctrl + F : Filter
 * Ctrl + G : Move to select folder in URL list
 * Ctrl + L : Focus on Folder
-* Ctrl + R : Run MsPaint
+* Ctrl + P : Run MsPaint
 * Ctrl + R : Run command window
 * Ctrl + U : Focus on Url command
 * Alt + F : Focus on File list
