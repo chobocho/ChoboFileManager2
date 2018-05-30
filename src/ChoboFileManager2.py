@@ -4,32 +4,48 @@ import os
 import ChoboFileManagerPanel
 import ChoboUrlManagerPanel
 import UrlManager
+import CommandInterpreter
 '''
 Start  : 2017.05.13
 Update : 2018.05.13a
 '''
 
-SW_TITLE = "ChoboFileManager2 V0627.0530a"
+SW_TITLE = "ChoboFileManager2 V0627.0531a"
 
 class ChoboFileManagerFrame(wx.Frame):
     def __init__(self, *args, **kw):
         super(ChoboFileManagerFrame, self).__init__(*args, **kw)
         self.Bind(wx.EVT_CLOSE, self.onCloseApp)
-        ctrl_F_Id = wx.NewId()
-        self.Bind(wx.EVT_MENU, self.onFind, id=ctrl_F_Id)
-        ctrl_O_Id = wx.NewId()
-        self.Bind(wx.EVT_MENU, self.onFocusOnUrl, id=ctrl_O_Id)
         ctrl_D_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFocusOnFileCMD, id=ctrl_D_Id)
+        ctrl_F_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFind, id=ctrl_F_Id)
+        ctrl_L_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnUrl, id=ctrl_L_Id)
+        ctrl_P_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onRunPaint, id=ctrl_P_Id)
+        ctrl_R_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onRun, id=ctrl_R_Id)
         ctrl_U_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onFocusOnUrlCMD, id=ctrl_U_Id)
         ctrl_Q_Id = wx.NewId()
         self.Bind(wx.EVT_MENU, self.onClose, id=ctrl_Q_Id)
+
+        alt_F_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnFileList, id=alt_F_Id)
+
+        alt_U_Id = wx.NewId()
+        self.Bind(wx.EVT_MENU, self.onFocusOnUrlList, id=alt_U_Id)
+
         accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('F'), ctrl_F_Id ),
-                                         (wx.ACCEL_CTRL,  ord('O'), ctrl_O_Id ),
                                          (wx.ACCEL_CTRL,  ord('D'), ctrl_D_Id ),
+                                         (wx.ACCEL_CTRL,  ord('L'), ctrl_L_Id ),
+                                         (wx.ACCEL_CTRL,  ord('P'), ctrl_P_Id ),
+                                         (wx.ACCEL_CTRL,  ord('R'), ctrl_R_Id ),
                                          (wx.ACCEL_CTRL,  ord('U'), ctrl_U_Id ),
-                                         (wx.ACCEL_CTRL,  ord('Q'), ctrl_Q_Id )])
+                                         (wx.ACCEL_CTRL,  ord('Q'), ctrl_Q_Id ),
+                                         (wx.ACCEL_ALT,   ord('F'), alt_F_Id ),
+                                         (wx.ACCEL_ALT,   ord('U'), alt_U_Id )])
         self.SetAcceleratorTable(accel_tbl)
 
         self.splitter = wx.SplitterWindow(self, -1, wx.Point(0, 0), wx.Size(800, 800), wx.SP_3D | wx.SP_BORDER)
@@ -59,6 +75,23 @@ class ChoboFileManagerFrame(wx.Frame):
             self.urlManagerPanel.onFind(keyword)
         dlg.Destroy()
 
+    def onRunPaint(self, event):
+        print ("onRunPaint")
+        ci = CommandInterpreter.CommandInterpreter()
+        ci.run("mspaint")
+
+    def onRun(self, event):
+        print("onRun")
+        dlg = wx.TextEntryDialog(None, 'Input command','Run')
+        dlg.SetValue("")
+
+        command = "-1"
+        if dlg.ShowModal() == wx.ID_OK:
+            command = dlg.GetValue()
+        dlg.Destroy()
+        print (command)
+        ci = CommandInterpreter.CommandInterpreter()
+        ci.run(command)
 
     def onFocusOnUrl(self, event):
         print ("onFocusOnUrl")
@@ -68,9 +101,17 @@ class ChoboFileManagerFrame(wx.Frame):
         print ("onFocusOnFileCMD")
         self.fileManagerPanel.setFocusOnCmdText()
 
+    def onFocusOnFileList(self, event):
+        print ("onFocusOnFileList")
+        self.fileManagerPanel.setFocusOnFileCtrl()
+
     def onFocusOnUrlCMD(self, event):
         print ("onFocusOnUrlCMD")
         self.urlManagerPanel.setFocusOnCmdText()
+
+    def onFocusOnUrlList(self, event):
+        print ("onFocusOnFileList")
+        self.urlManagerPanel.setFocusOnUrlCtrl()
 
     def onClose(self, event):
         self.Close()

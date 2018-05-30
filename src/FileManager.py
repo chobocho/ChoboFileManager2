@@ -53,5 +53,5 @@ class FileManager:
                 tmpFile.append(filename)
                 tmpFile.append(str(os.path.getsize(fullfilename)))
             self.fileList.append(tmpFile)
-        self.fileList.sort(key=lambda x:x[0])
+        self.fileList.sort(key=lambda x:x[0].lower())
         self.fileList.insert(0, ["..", ""])

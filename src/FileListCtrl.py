@@ -48,11 +48,11 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             self.SetItem(index, 0, file[0])
             self.SetItem(index, 1, file[1])
 
-            if "exe." == file[0][:-5:-1] or \
-               "tab." == file[0][:-5:-1]:
+            if "exe." == file[0][:-5:-1].lower() or \
+               "tab." == file[0][:-5:-1].lower():
                 self.SetItemBackgroundColour(index, "LIGHT BLUE")
-            elif "yp." == file[0][:-4:-1] or \
-               "wyp." == file[0][:-5:-1]:
+            elif "yp." == file[0][:-4:-1].lower() or \
+               "wyp." == file[0][:-5:-1].lower():
                 self.SetItemBackgroundColour(index, "GREEN YELLOW")
             elif "[" == file[0][0] and "]" == file[0][-1]:
                 self.SetItemBackgroundColour(index, "GOLDENROD")
@@ -67,11 +67,11 @@ class FileListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 self.SetItem(index, 0, file[0])
                 self.SetItem(index, 1, file[1])
                 
-                if "exe." == file[0][:-5:-1] or \
-                   "tab." == file[0][:-5:-1]:
+                if "exe." == file[0][:-5:-1].lower() or \
+                   "tab." == file[0][:-5:-1].lower():
                     self.SetItemBackgroundColour(index, "LIGHT BLUE")
-                elif "yp." == file[0][:-4:-1] or \
-                   "wyp." == file[0][:-5:-1]:
+                elif "yp." == file[0][:-4:-1].lower() or \
+                   "wyp." == file[0][:-5:-1].lower():
                     self.SetItemBackgroundColour(index, "GREEN YELLOW")
                 elif "[" == file[0][0] and "]" == file[0][-1]:
                     self.SetItemBackgroundColour(index, "GOLDENROD")

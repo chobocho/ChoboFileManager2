@@ -18,6 +18,9 @@ class ChoboFileManagerPanel(wx.Panel):
     def setFocusOnUrlText(self):
         self.urlText.SetFocus()
 
+    def setFocusOnFileCtrl(self):
+        self.fileList.SetFocus()
+
     def setFocusOnCmdText(self):
         self.cmdText.SetFocus()
 
@@ -78,6 +81,12 @@ class ChoboFileManagerPanel(wx.Panel):
         print ("run " + exefile)
         os.system("start " + exefile)
 
+    def on_runFireFox(self, datafile):
+        print ("on_runFireFox " + datafile)
+        msg = "start \"\" /max " + datafile
+        print (msg)
+        os.system(msg)
+
     def on_runPython(sefl, pythonFile):
         print ("run python " + pythonFile)
         os.system("start python " + pythonFile)
@@ -102,13 +111,16 @@ class ChoboFileManagerPanel(wx.Panel):
             if self.fileManager.updateCurrentFolder(fullfilename) == True:
                 self.fileList.update(self.fileManager.getFileList())
  
-        elif "exe." == url[:-5:-1] or \
-             "tab." == url[:-5:-1]:
+        elif "exe." == url[:-5:-1].lower() or \
+             "tab." == url[:-5:-1].lower():
             self.on_runexe(url)
      
         elif ("yp." == url[:-4:-1].lower() or \
               "wyp." == url[:-5:-1].lower()):
             self.on_runPython(url)
+
+        elif "fdp." == url[:-5:-1].lower():
+            self.on_runFireFox(url)
 
         elif ("txt." == url[:-5:-1].lower() or \
               "pac." == url[:-5:-1].lower() or \
@@ -120,7 +132,7 @@ class ChoboFileManagerPanel(wx.Panel):
 
 
     def drawUI(self):
-        print ("drawUI")
+        print ("ChoboFileManagerPanel::drawUI")
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         urlBox = wx.BoxSizer(wx.HORIZONTAL)

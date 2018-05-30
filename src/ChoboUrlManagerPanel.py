@@ -16,6 +16,9 @@ class ChoboUrlManagerPanel(wx.Panel):
     def setFocusOnCmdText(self):
         self.cmdText.SetFocus()
 
+    def setFocusOnUrlCtrl(self):
+        self.urlList.SetFocus()
+
     def OnSaveURL(self, evt):
         print ("OnSaveURL")
         self.urlManger.saveURL()
@@ -76,7 +79,7 @@ class ChoboUrlManagerPanel(wx.Panel):
         self.urlManger.saveURL()
 
     def drawUI(self):
-        print ("drawUI")
+        print ("ChoboUrlManagerPanel::drawUI")
         self.SetBackgroundColour('LIGHT GREY')
         sizer = wx.BoxSizer(wx.VERTICAL)
 
