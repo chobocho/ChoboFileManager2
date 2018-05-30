@@ -3,6 +3,7 @@
 
 ## How to use
 * Ctrl + F : Filter
+* Ctrl + G : Move to select folder in URL list
 * Ctrl + L : Focus on Folder
 * Ctrl + D : Focus on File command
 * Ctrl + U : Focus on Url command
