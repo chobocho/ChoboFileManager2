@@ -6,6 +6,7 @@ import FileManager
 import UrlManager
 import random
 import os
+from pathlib import Path
 
 class ChoboFileManagerPanel(wx.Panel):
     def __init__(self, *args, **kw):
@@ -166,31 +167,38 @@ class ChoboFileManagerPanel(wx.Panel):
         if (url == ".."):
             if self.fileManager.updateCurrentFolder(url) == True:
                 self.fileList.update(self.fileManager.getFileList())
+            return
 
-        elif (url[0] == '[' and isFolder == True):
+        if (url[0] == '[' and isFolder == True):
             if self.fileManager.updateCurrentFolder(fullfilename) == True:
                 self.fileList.update(self.fileManager.getFileList())
- 
-        elif "exe." == url[:-5:-1].lower() or \
+            return
+
+        fullurl = Path(url).absolute().as_uri()
+        print ("FullUrl : " + fullurl)
+
+        if "exe." == url[:-5:-1].lower() or \
              "tab." == url[:-5:-1].lower() or \
              "fdp." == url[:-5:-1].lower() or \
+             "gpj." == url[:-5:-1].lower() or \
+             "gepj." == url[:-6:-1].lower() or \
+             "gnp." == url[:-5:-1].lower() or \
+             "pmb." == url[:-5:-1].lower() or \
              "mth." == url[:-5:-1].lower() or \
              "lmth." == url[:-6:-1].lower():
-            self.on_runexe(url)
+            self.on_runexe(fullurl)
      
         elif ("yp." == url[:-4:-1].lower() or \
               "wyp." == url[:-5:-1].lower()):
-            self.on_runPython(url)
+            self.on_runPython(fullurl)
 
         elif ("txt." == url[:-5:-1].lower() or \
               "pac." == url[:-5:-1].lower() or \
               "ppc." == url[:-5:-1].lower() or \
               "lmx." == url[:-5:-1].lower() or \
               "gol." == url[:-5:-1].lower()):
-            self.on_runtxt(url)
+            self.on_runtxt(fullurl)
         self.urlText.SetValue(self.fileManager.getCurrentDir())
-        self.fileManager.updateFilelist()
-        self.fileList.update(self.fileManager.getFileList())
 
 
     def drawUI(self):
