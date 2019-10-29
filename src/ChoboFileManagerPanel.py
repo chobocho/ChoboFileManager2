@@ -88,7 +88,7 @@ class ChoboFileManagerPanel(wx.Panel):
 
     def on_runexe(self, exefile):
         print ("run " + exefile)
-        os.system("start " + exefile)
+        os.system(exefile)
 
     def on_runPython(sefl, pythonFile):
         print ("run python " + pythonFile)
@@ -159,6 +159,9 @@ class ChoboFileManagerPanel(wx.Panel):
     def handleFileListEvnet(self, url):
         print ("Event")
 
+        if len(url) == 0:
+           return
+
         currdir = self.fileManager.getCurrentDir()
         filename = url[1:-1]
         fullfilename = os.path.join(currdir, filename)
@@ -174,7 +177,8 @@ class ChoboFileManagerPanel(wx.Panel):
                 self.fileList.update(self.fileManager.getFileList())
             return
 
-        fullurl = Path(url).absolute().as_uri()
+        fullurl = os.path.join(currdir, url)
+        #fullurl = Path(url).absolute().as_uri()
         print ("FullUrl : " + fullurl)
 
         if "exe." == url[:-5:-1].lower() or \
@@ -184,20 +188,20 @@ class ChoboFileManagerPanel(wx.Panel):
              "gepj." == url[:-6:-1].lower() or \
              "gnp." == url[:-5:-1].lower() or \
              "pmb." == url[:-5:-1].lower() or \
+			 "txt." == url[:-5:-1].lower() or \
              "mth." == url[:-5:-1].lower() or \
              "lmth." == url[:-6:-1].lower():
-            self.on_runexe(fullurl)
+            self.on_runexe('"' + fullurl + '"')
      
         elif ("yp." == url[:-4:-1].lower() or \
               "wyp." == url[:-5:-1].lower()):
-            self.on_runPython(fullurl)
+            self.on_runPython('"' + fullurl + '"')
 
-        elif ("txt." == url[:-5:-1].lower() or \
-              "pac." == url[:-5:-1].lower() or \
+        elif ("pac." == url[:-5:-1].lower() or \
               "ppc." == url[:-5:-1].lower() or \
               "lmx." == url[:-5:-1].lower() or \
               "gol." == url[:-5:-1].lower()):
-            self.on_runtxt(fullurl)
+            self.on_runtxt('"' + fullurl + '"')
         self.urlText.SetValue(self.fileManager.getCurrentDir())
 
 
